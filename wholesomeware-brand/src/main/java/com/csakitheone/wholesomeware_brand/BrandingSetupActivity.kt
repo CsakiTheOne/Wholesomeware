@@ -19,19 +19,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -106,16 +101,7 @@ class BrandingSetupActivity : ComponentActivity() {
                     modifier = Modifier.verticalScroll(rememberScrollState()),
                 ) {
                     TopAppBar(
-                        title = { Text(text = Wholesomeware.brandName) },
-                        navigationIcon = {
-                            Image(
-                                modifier = Modifier
-                                    .width(48.dp)
-                                    .aspectRatio(1f),
-                                painter = painterResource(id = R.drawable.ic),
-                                contentDescription = null,
-                            )
-                        },
+                        title = { Text(text = WholesomeWare.brandName) },
                     )
                     LinearProgressIndicator(
                         modifier = Modifier.fillMaxWidth(),
