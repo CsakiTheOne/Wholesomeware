@@ -21,6 +21,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
@@ -100,14 +101,18 @@ class BrandingSetupActivity : ComponentActivity() {
                 Column(
                     modifier = Modifier.verticalScroll(rememberScrollState()),
                 ) {
-                    TopAppBar(
-                        title = { Text(text = WholesomeWare.brandName) },
-                    )
-                    LinearProgressIndicator(
-                        modifier = Modifier.fillMaxWidth(),
-                        progress = progress,
-                        trackColor = MaterialTheme.colorScheme.background,
-                    )
+                    Surface(
+                        shadowElevation = 8.dp,
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.banner),
+                            contentDescription = null
+                        )
+                        LinearProgressIndicator(
+                            modifier = Modifier.fillMaxWidth(),
+                            progress = progress,
+                        )
+                    }
                     AnimatedVisibility(visible = progress == 1f) {
                         Card(modifier = Modifier.padding(9.dp)) {
                             Text(
@@ -130,6 +135,23 @@ class BrandingSetupActivity : ComponentActivity() {
                         )
                         Step(text = "Import dependency") { steps += Pair(0, it) }
                         Step(text = "Create splash screen") { steps += Pair(1, it) }
+                        Card(
+                            modifier = Modifier.padding(8.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceTint,
+                            ),
+                        ) {
+                            Text(
+                                modifier = Modifier.padding(8.dp),
+                                text = """
+                            <style name="SplashScreen" parent="Theme.SplashScreen">
+                                <item name="postSplashScreenTheme">@style/Theme.WholesomeWare</item>
+                                <item name="android:windowSplashScreenBrandingImage">@drawable/logo_with_text</item>
+                            </style>
+                        """.trimIndent(),
+                                style = MaterialTheme.typography.bodySmall,
+                            )
+                        }
                         Step(text = "windowSplashScreenBrandingImage") { steps += Pair(2, it) }
                         Step(text = "installSplashScreen()") { steps += Pair(3, it) }
                         Button(

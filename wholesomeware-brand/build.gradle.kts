@@ -73,7 +73,7 @@ afterEvaluate {
 
                 groupId = "com.csakitheone"
                 artifactId = "wholesomeware-brand"
-                version = "0.2"
+                version = "1.0"
             }
         }
     }

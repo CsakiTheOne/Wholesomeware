@@ -2,5 +2,6 @@
 <resources>
     <style name="SplashScreen" parent="Theme.SplashScreen">
         <item name="postSplashScreenTheme">@style/Theme.WholesomeWare</item>
+        <item name="android:windowSplashScreenBrandingImage">@drawable/logo_with_text</item>
     </style>
 </resources>
