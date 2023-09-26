@@ -12,9 +12,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -38,10 +41,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.csakitheone.wholesomeware_brand.ui.components.WholesomeWareStoreButton
 import com.csakitheone.wholesomeware_brand.ui.theme.WholesomewareBrandTheme
+import kotlin.math.min
 
 class BrandingSetupActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +62,7 @@ class BrandingSetupActivity : ComponentActivity() {
     @Composable
     fun Step(
         text: String,
-        onChanged: (Boolean) -> Unit,
+        onChanged: (Boolean) -> Unit = {},
     ) {
         var isDone by rememberSaveable { mutableStateOf(false) }
 
@@ -87,33 +95,88 @@ class BrandingSetupActivity : ComponentActivity() {
     @Composable
     fun BrandingSetupScreen() {
         WholesomewareBrandTheme {
-            val stepsCount = 5
-            var steps by remember { mutableStateOf(mapOf<Int, Boolean>()) }
-            val progress by animateFloatAsState(
-                targetValue = steps.values.count { it } / stepsCount.toFloat(),
-                label = "Progress",
-            )
+            val scrollState = rememberScrollState()
 
             Surface(
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background,
             ) {
-                Column(
-                    modifier = Modifier.verticalScroll(rememberScrollState()),
+                Box(
+                    contentAlignment = Alignment.TopStart,
                 ) {
                     Surface(
+                        modifier = Modifier.alpha(1 - scrollState.value / 500f),
                         shadowElevation = 8.dp,
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.banner),
-                            contentDescription = null
-                        )
-                        LinearProgressIndicator(
-                            modifier = Modifier.fillMaxWidth(),
-                            progress = progress,
+                            contentDescription = null,
                         )
                     }
-                    AnimatedVisibility(visible = progress == 1f) {
+                    Column(
+                        modifier = Modifier.verticalScroll(scrollState),
+                    ) {
+                        Spacer(modifier = Modifier.height(230.dp))
+                        Card(modifier = Modifier.padding(9.dp)) {
+                            Text(
+                                modifier = Modifier.padding(16.dp),
+                                text = "Splash screen",
+                                style = MaterialTheme.typography.titleMedium,
+                            )
+                            Step(text = "Import dependency")
+                            Step(text = "Create splash screen")
+                            Card(
+                                modifier = Modifier.padding(8.dp),
+                                colors = CardDefaults.cardColors(
+                                    containerColor = MaterialTheme.colorScheme.surfaceTint,
+                                ),
+                            ) {
+                                Text(
+                                    modifier = Modifier.padding(8.dp),
+                                    text = """
+                            <style name="SplashScreen" parent="Theme.SplashScreen">
+                                <item name="postSplashScreenTheme">@style/Theme.WholesomeWare</item>
+                                <item name="android:windowSplashScreenBrandingImage">@drawable/logo_with_text</item>
+                            </style>
+                        """.trimIndent(),
+                                    style = MaterialTheme.typography.bodySmall,
+                                )
+                            }
+                            Step(text = "installSplashScreen()")
+                            Button(
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .fillMaxWidth(),
+                                onClick = {
+                                    Log.w(
+                                        "BrandingSetup",
+                                        "https://developer.android.com/develop/ui/views/launch/splash-screen"
+                                    )
+                                    Toast.makeText(
+                                        this@BrandingSetupActivity,
+                                        "Check logcat",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            ) {
+                                Text(text = "Send documentation to debugger")
+                            }
+                        }
+                        Card(modifier = Modifier.padding(9.dp)) {
+                            Text(
+                                modifier = Modifier.padding(16.dp),
+                                text = "Brand placement",
+                                style = MaterialTheme.typography.titleMedium,
+                            )
+                            Step(text = "Place a link in the app which opens the developer page")
+                            Text(
+                                modifier = Modifier.padding(8.dp),
+                                text = "WholesomeWareStoreButton()",
+                            )
+                            WholesomeWareStoreButton(
+                                modifier = Modifier.padding(8.dp),
+                            )
+                        }
                         Card(modifier = Modifier.padding(9.dp)) {
                             Text(
                                 modifier = Modifier.padding(16.dp),
@@ -124,65 +187,6 @@ class BrandingSetupActivity : ComponentActivity() {
                             Text(
                                 modifier = Modifier.padding(16.dp),
                                 text = "After completing these steps, please rebuild the app.",
-                            )
-                        }
-                    }
-                    Card(modifier = Modifier.padding(9.dp)) {
-                        Text(
-                            modifier = Modifier.padding(16.dp),
-                            text = "Splash screen",
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                        Step(text = "Import dependency") { steps += Pair(0, it) }
-                        Step(text = "Create splash screen") { steps += Pair(1, it) }
-                        Card(
-                            modifier = Modifier.padding(8.dp),
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.surfaceTint,
-                            ),
-                        ) {
-                            Text(
-                                modifier = Modifier.padding(8.dp),
-                                text = """
-                            <style name="SplashScreen" parent="Theme.SplashScreen">
-                                <item name="postSplashScreenTheme">@style/Theme.WholesomeWare</item>
-                                <item name="android:windowSplashScreenBrandingImage">@drawable/logo_with_text</item>
-                            </style>
-                        """.trimIndent(),
-                                style = MaterialTheme.typography.bodySmall,
-                            )
-                        }
-                        Step(text = "windowSplashScreenBrandingImage") { steps += Pair(2, it) }
-                        Step(text = "installSplashScreen()") { steps += Pair(3, it) }
-                        Button(
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .fillMaxWidth(),
-                            onClick = {
-                                Log.w(
-                                    "BrandingSetup",
-                                    "https://developer.android.com/develop/ui/views/launch/splash-screen"
-                                )
-                                Toast.makeText(
-                                    this@BrandingSetupActivity,
-                                    "Check logcat",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        ) {
-                            Text(text = "Send documentation to debugger")
-                        }
-                    }
-                    Card(modifier = Modifier.padding(9.dp)) {
-                        Text(
-                            modifier = Modifier.padding(16.dp),
-                            text = "Brand placement",
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                        Step(text = "Place logo in the app somewhere (preferably in an about section)") {
-                            steps += Pair(
-                                10,
-                                it
                             )
                         }
                     }
