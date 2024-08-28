@@ -32,5 +32,5 @@ repositories {
 Kotlin:
 
 ```kotlin
-implementation("com.github.CsakiTheOne:WholesomeWare:VERSION")
+implementation("com.github.WholesomeWare:WholesomeWareBrandingAndroid:1.1")
 ```
