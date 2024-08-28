@@ -1,6 +1,6 @@
 # WholesomeWare
 
-[![](https://jitpack.io/v/CsakiTheOne/WholesomeWare.svg)](https://jitpack.io/#CsakiTheOne/WholesomeWare)
+[![](https://jitpack.io/v/WholesomeWare/WholesomeWareBrandingAndroid.svg)](https://jitpack.io/#WholesomeWare/WholesomeWareBrandingAndroid)
 
 This Android library contains everything to add the WholesomeWare branding to an app.
 
