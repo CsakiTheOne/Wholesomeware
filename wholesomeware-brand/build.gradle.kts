@@ -58,10 +58,6 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")
     implementation(platform("androidx.compose:compose-bom:2024.08.00"))
-    implementation(platform("androidx.compose:compose-bom:2024.08.00"))
-    androidTestImplementation(platform("androidx.compose:compose-bom:2024.08.00"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2024.08.00"))
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
 
@@ -71,9 +67,9 @@ afterEvaluate {
             register("mavenJava", MavenPublication::class.java) {
                 from(components["release"])
 
-                groupId = "com.csakitheone"
+                groupId = "com.wholesomeware"
                 artifactId = "wholesomeware-brand"
-                version = "1.0"
+                version = "1.1"
             }
         }
     }
