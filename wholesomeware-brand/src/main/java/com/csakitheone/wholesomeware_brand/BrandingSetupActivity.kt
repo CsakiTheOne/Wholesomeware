@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -54,6 +56,7 @@ import kotlin.math.min
 class BrandingSetupActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
             BrandingSetupScreen()
         }
@@ -101,94 +104,82 @@ class BrandingSetupActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background,
             ) {
-                Box(
-                    contentAlignment = Alignment.TopStart,
+                Column(
+                    modifier = Modifier
+                        .verticalScroll(scrollState)
+                        .systemBarsPadding(),
                 ) {
-                    Surface(
-                        modifier = Modifier.alpha(1 - scrollState.value / 500f),
-                        shadowElevation = 8.dp,
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.banner),
-                            contentDescription = null,
+                    Card(modifier = Modifier.padding(8.dp)) {
+                        Text(
+                            modifier = Modifier.padding(16.dp),
+                            text = "Splash screen",
+                            style = MaterialTheme.typography.titleMedium,
                         )
-                    }
-                    Column(
-                        modifier = Modifier.verticalScroll(scrollState),
-                    ) {
-                        Spacer(modifier = Modifier.height(230.dp))
-                        Card(modifier = Modifier.padding(9.dp)) {
+                        Step(text = "Import dependency")
+                        Step(text = "Create splash screen")
+                        Card(
+                            modifier = Modifier.padding(8.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceTint,
+                            ),
+                        ) {
                             Text(
-                                modifier = Modifier.padding(16.dp),
-                                text = "Splash screen",
-                                style = MaterialTheme.typography.titleMedium,
-                            )
-                            Step(text = "Import dependency")
-                            Step(text = "Create splash screen")
-                            Card(
                                 modifier = Modifier.padding(8.dp),
-                                colors = CardDefaults.cardColors(
-                                    containerColor = MaterialTheme.colorScheme.surfaceTint,
-                                ),
-                            ) {
-                                Text(
-                                    modifier = Modifier.padding(8.dp),
-                                    text = """
+                                text = """
                             <style name="SplashScreen" parent="Theme.SplashScreen">
                                 <item name="postSplashScreenTheme">@style/Theme.WholesomeWare</item>
                                 <item name="android:windowSplashScreenBrandingImage">@drawable/logo_with_text</item>
                             </style>
                         """.trimIndent(),
-                                    style = MaterialTheme.typography.bodySmall,
+                                style = MaterialTheme.typography.bodySmall,
+                            )
+                        }
+                        Step(text = "installSplashScreen()")
+                        Button(
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .fillMaxWidth(),
+                            onClick = {
+                                Log.w(
+                                    "BrandingSetup",
+                                    "https://developer.android.com/develop/ui/views/launch/splash-screen"
                                 )
+                                Toast.makeText(
+                                    this@BrandingSetupActivity,
+                                    "Check logcat",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
-                            Step(text = "installSplashScreen()")
-                            Button(
-                                modifier = Modifier
-                                    .padding(8.dp)
-                                    .fillMaxWidth(),
-                                onClick = {
-                                    Log.w(
-                                        "BrandingSetup",
-                                        "https://developer.android.com/develop/ui/views/launch/splash-screen"
-                                    )
-                                    Toast.makeText(
-                                        this@BrandingSetupActivity,
-                                        "Check logcat",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            ) {
-                                Text(text = "Send documentation to debugger")
-                            }
+                        ) {
+                            Text(text = "Send documentation to debugger")
                         }
-                        Card(modifier = Modifier.padding(9.dp)) {
-                            Text(
-                                modifier = Modifier.padding(16.dp),
-                                text = "Brand placement",
-                                style = MaterialTheme.typography.titleMedium,
-                            )
-                            Step(text = "Place a link in the app which opens the developer page")
-                            Text(
-                                modifier = Modifier.padding(8.dp),
-                                text = "WholesomeWareStoreButton()",
-                            )
-                            WholesomeWareStoreButton(
-                                modifier = Modifier.padding(8.dp),
-                            )
-                        }
-                        Card(modifier = Modifier.padding(9.dp)) {
-                            Text(
-                                modifier = Modifier.padding(16.dp),
-                                text = "Finishing up",
-                                style = MaterialTheme.typography.titleMedium,
-                            )
-                            Step(text = "Remove the setup function call") {}
-                            Text(
-                                modifier = Modifier.padding(16.dp),
-                                text = "After completing these steps, please rebuild the app.",
-                            )
-                        }
+                    }
+                    Card(modifier = Modifier.padding(8.dp)) {
+                        Text(
+                            modifier = Modifier.padding(16.dp),
+                            text = "Brand placement",
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                        Step(text = "Place a link in the app which opens the developer page")
+                        Text(
+                            modifier = Modifier.padding(8.dp),
+                            text = "WholesomeWareStoreButton()",
+                        )
+                        WholesomeWareStoreButton(
+                            modifier = Modifier.padding(8.dp),
+                        )
+                    }
+                    Card(modifier = Modifier.padding(8.dp)) {
+                        Text(
+                            modifier = Modifier.padding(16.dp),
+                            text = "Finishing up",
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                        Step(text = "Remove the setup function call") {}
+                        Text(
+                            modifier = Modifier.padding(16.dp),
+                            text = "After completing these steps, please rebuild the app.",
+                        )
                     }
                 }
             }
